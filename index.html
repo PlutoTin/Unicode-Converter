@@ -1,0 +1,45 @@
+<body class="bg-gray-100 font-sans">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-center mb-8">Unicode Converter</h1>
+    <div class="flex justify-center">
+      <div class="w-full md:w-1/2">
+        <div class="mb-4">
+          <label for="input1" class="block text-gray-700 font-bold mb-2">Text to Convert:</label>
+          <textarea id="input1" class="w-full p-3 border border-gray-300 rounded" rows="4"></textarea>
+        </div>
+        <div class="mb-4">
+          <label for="input2" class="block text-gray-700 font-bold mb-2">Converted Text/Unicode:</label>
+          <textarea id="input2" class="w-full p-3 border border-gray-300 rounded" rows="4" disabled></textarea>
+        </div>
+        <div class="flex justify-center">
+          <button id="convert-to-unicode" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">Convert to Unicode</button>
+          <button id="convert-to-text" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Convert to Text</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const input1 = document.getElementById('input1');
+    const input2 = document.getElementById('input2');
+    const convertToUnicodeBtn = document.getElementById('convert-to-unicode');
+    const convertToTextBtn = document.getElementById('convert-to-text');
+
+    convertToUnicodeBtn.addEventListener('click', () => {
+      const inputText = input1.value;
+      const unicodeText = inputText.replace(/[^\u0000-\u007F]/g, (match) => {
+        const code = match.charCodeAt(0).toString(16).toUpperCase();
+        return '\\u' + ('0000' + code).slice(-4);
+      });
+      input2.value = unicodeText;
+    });
+
+    convertToTextBtn.addEventListener('click', () => {
+      const inputText = input1.value;
+      const unicodeText = inputText.replace(/\\u([\da-f]{4})/gi, (match, code) => {
+        return String.fromCharCode(parseInt(code, 16));
+      });
+      input2.value = unicodeText;
+    });
+  </script>
+</body>
